@@ -2,20 +2,26 @@ const express = require('express');
 
 const ctrl = require("../../controllers/posts");
 
-const {validateBody} = require("../../middlewares");
+const {validateBody, isValidId} = require("../../middlewares");
 
-const schemas = require("../../schemas/posts");
+const {schemas} = require("../../models/post");
 
 const router = express.Router();
 
 router.get('/', ctrl.getAll);
 
-router.get('/:postId', ctrl.getById);
+router.get('/:postId', isValidId, ctrl.getById);
 
 router.post('/', validateBody(schemas.addSchema), ctrl.add);
 
-router.put('/:postId', validateBody(schemas.addSchema), ctrl.updateById);
+router.put('/:postId', isValidId, validateBody(schemas.addSchema), ctrl.updateById);
 
-router.delete('/:postId', ctrl.deleteById);
+router.patch(
+    '/:postId/favorite',
+    validateBody(schemas.updateFavoriteSchema),
+    ctrl.updateStatusPost
+  );
+
+router.delete('/:postId', isValidId, ctrl.deleteById);
 
 module.exports = router;
