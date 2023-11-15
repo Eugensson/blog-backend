@@ -2,26 +2,33 @@ const express = require('express');
 
 const ctrl = require("../../controllers/posts");
 
-const {validateBody, isValidId} = require("../../middlewares");
+const {validateBody, isValidId, authenticate} = require("../../middlewares");
 
 const {schemas} = require("../../models/post");
 
 const router = express.Router();
 
-router.get('/', ctrl.getAll);
+router.get('/', authenticate, ctrl.getAll);
 
-router.get('/:postId', isValidId, ctrl.getById);
+router.get('/:postId', authenticate, isValidId, ctrl.getById);
 
-router.post('/', validateBody(schemas.addSchema), ctrl.add);
+router.post('/', authenticate, validateBody(schemas.addSchema), ctrl.add);
 
-router.put('/:postId', isValidId, validateBody(schemas.addSchema), ctrl.updateById);
+router.put(
+  '/:postId',
+  isValidId,
+  authenticate,
+  validateBody(schemas.addSchema),
+  ctrl.updateById
+);
 
 router.patch(
-    '/:postId/favorite',
-    validateBody(schemas.updateFavoriteSchema),
-    ctrl.updateStatusPost
-  );
+  '/:postId/favorite',
+  authenticate,
+  validateBody(schemas.updateFavoriteSchema),
+  ctrl.updateStatusPost
+);
 
-router.delete('/:postId', isValidId, ctrl.deleteById);
+router.delete('/:postId', authenticate, isValidId, ctrl.deleteById);
 
 module.exports = router;
