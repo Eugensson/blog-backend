@@ -1,12 +1,16 @@
 const express = require("express");
 
-const {validateBody, authenticate, upload} = require("../../middlewares");
+const {validateBody, authenticate, upload, passport} = require("../../middlewares");
 
 const {schemas} = require("../../models/user");
 
 const ctrl = require("../../controllers/auth");
 
 const router = express.Router();
+
+router.get("/google", passport.authenticate("google", {scope: ["email", "profile"]}));
+
+router.get("/google/callback", passport.authenticate("google", {session: false}), ctrl.googleAuth);
 
 router.post("/signup", validateBody(schemas.signupSchema), ctrl.signUp);
 
