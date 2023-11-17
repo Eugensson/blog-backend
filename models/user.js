@@ -21,7 +21,11 @@ const userSchema = new Schema({
         minlength: 6,
         required: true,
     },
-    token: {
+    accessToken: {
+        type: String,
+        default: "",
+    },
+    refreshToken: {
         type: String,
         default: "",
     },
@@ -44,9 +48,14 @@ const signinSchema = Joi.object({
     password: Joi.string().min(6).required(),
 })
 
+const refreshSchema = Joi.object({
+    refreshToken: Joi.string().required(),
+})
+
 const schemas = {
     signupSchema,
     signinSchema,
+    refreshSchema,
 }
 
 const User = model("user", userSchema);

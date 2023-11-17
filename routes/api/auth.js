@@ -18,4 +18,6 @@ router.post("/signout", authenticate, ctrl.signOut);
 
 router.patch("/avatars", authenticate, upload.single("avatar"), ctrl.updateAvatar);
 
+router.post("/refresh", validateBody(schemas.refreshSchema), ctrl.refresh);
+
 module.exports = router;
