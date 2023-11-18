@@ -14,6 +14,10 @@ router.get("/google/callback", passport.authenticate("google", {session: false})
 
 router.post("/signup", validateBody(schemas.signupSchema), ctrl.signUp);
 
+router.get("/verify/:verificationCode", ctrl.verifyEmail);
+
+router.post("/verify", validateBody(schemas.emailSchema), ctrl.resendVerifyEmail);
+
 router.post("/signin", validateBody(schemas.signinSchema), ctrl.signIn);
 
 router.get("/current", authenticate, ctrl.getCurrent);

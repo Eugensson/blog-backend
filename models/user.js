@@ -33,6 +33,14 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+    verificationCode: {
+        type: String,
+        default: "",
+    },
 }, {versionKey: false, timestamps: true})
 
 userSchema.post("save", handleMongooseError);
@@ -52,10 +60,15 @@ const refreshSchema = Joi.object({
     refreshToken: Joi.string().required(),
 })
 
+const emailSchema = Joi.object({
+    email: Joi.string().required(),
+});
+
 const schemas = {
     signupSchema,
     signinSchema,
     refreshSchema,
+    emailSchema,
 }
 
 const User = model("user", userSchema);
